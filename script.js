@@ -1,88 +1,70 @@
-let tarefas = []
-let linha
-let delet
-let result
-let tarefa = document.getElementById("tarefa")
 const results = document.getElementById("result")
+let tarefa = document.getElementById("tarefa")
+let linhaP
+let delet
+let deletbtn
+let resultDiv
+let count = 0
+let span
 
 function addTarefa() {
     if (tarefa.value === "") return alert("Digite uma tarefa")
 
-    tarefas.push(tarefa.value)
+    count++;
 
-    result = document.createElement("div")
-    result.classList = "results"
+    resultDiv = document.createElement("div")
+    resultDiv.setAttribute('id', `div.${count}`)
+    resultDiv.classList = "results"
 
-    linha = document.createElement("p")
-    linha.classList = "notChecked"
+    span = document.createElement("div")
+    /* span.classList = "material-symbols-outlined"
+    span.innerHTML = `circle` */
+    span.classList = "notChecked"
+    span.setAttribute('id', `icon`)
+    span.innerHTML = `<span class="material-symbols-outlined">circle</span>`
 
-    delet = document.createElement("button")
-    delet.setAttribute('type', 'submit')
+    linhaP = document.createElement("p")
+    linhaP.classList = "notChecked"
 
-    tarefas.forEach((el, index) => {
-        linha.innerHTML = `<span class="material-symbols-outlined">circle</span> ${el}`
-        linha.setAttribute('id', `tarefa.${index}`)
-        linha.setAttribute('onclick', `checked(${index})`)
+    linhaP.innerHTML = `${tarefa.value}`
+    linhaP.setAttribute('id', `${count}`)
+    resultDiv.setAttribute('onclick', `checked(${count})`)
 
-        result.setAttribute('id', `div-tarefa.${index}`)
+    delet = document.createElement("div")
+    delet.classList = "deletBtn"
+    deletbtn = document.createElement("button")
+    deletbtn.setAttribute('type', 'submit')
+    deletbtn.setAttribute('onclick', `delTarefa(${count})`)
+    deletbtn.innerHTML = `<span class="material-symbols-outlined">delete</span> Deletar`
 
-        delet.setAttribute('onclick', `delTarefa(${index})`)
-    })
-
-    delet.innerHTML = `<span class="material-symbols-outlined">delete</span> Deletar`
-
-    results.appendChild(result)
-    result.appendChild(linha)
-    result.appendChild(delet)
+    results.appendChild(resultDiv)
+    resultDiv.appendChild(span)
+    resultDiv.appendChild(linhaP)
+    resultDiv.appendChild(delet)
+    delet.appendChild(deletbtn)
     tarefa.value = ""
+    tarefa.focus()
 }
 
-function delTarefa(index) {
-    //result = document.getElementById(`div-tarefa.${index}`)
-    document.querySelectorAll('.results').forEach(el => el.remove())
-
-    //result.remove()
-    tarefas.splice(index, 1)
-    
-    tarefas.forEach((el, index) => {
-        result = document.createElement("div")
-        result.classList = "results"
-
-        linha = document.createElement("p")
-        linha.classList = "notChecked"
-
-        delet = document.createElement("button")
-        delet.setAttribute('type', 'submit')
-
-        linha.innerHTML = `<span class="material-symbols-outlined">circle</span> ${el}`
-        linha.setAttribute('id', `tarefa.${index}`)
-        linha.setAttribute('onclick', `checked(${index})`)
-
-        result.setAttribute('id', `div-tarefa.${index}`)
-
-        delet.setAttribute('onclick', `delTarefa(${index})`)
-
-        delet.innerHTML = `<span class="material-symbols-outlined">delete</span> Deletar`
-
-        results.appendChild(result)
-        result.appendChild(linha)
-        result.appendChild(delet)
-    })
+function delTarefa(id) {
+    let del = document.getElementById(`div.${id}`)
+    del.remove()
 }
 
-function checked(index) {
-    linha = document.getElementById(`tarefa.${index}`)
+function checked(id) {
+    let divItem = document.getElementById(`div.${id}`)
+    let divSpan = divItem.querySelector('div')
+    let span = divSpan.querySelector('span')
+    let item = document.getElementById(`${id}`);
+    let classe = item.getAttribute('class');
 
-    if (linha.className === 'notChecked') {
-        linha.classList = "checked"
-        linha.innerHTML = `<span class="material-symbols-outlined">check_circle</span> ${tarefas[index]}`
+    if (classe == "notChecked") {
+        item.classList = "checked"
+        divSpan.classList = "checked"
+        span.innerHTML = "check_circle"
     } else {
-        linha.classList = "notChecked"
-        linha.innerHTML = `<span class="material-symbols-outlined">circle</span> ${tarefas[index]}`
+        item.classList = "notChecked"
+        divSpan.classList = "notChecked"
+        span.innerHTML = "circle"
     }
-}
-
-function editTarefa() {
-
-
 }
